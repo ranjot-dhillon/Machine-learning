@@ -79,15 +79,15 @@ def create_cloud(selected_user, df):
     tem = df[df['user'] != 'group notification']
     tem = tem[tem['message'] != '<Media omitted>\n']
 
-    def remove_stop(message):
+    def remove_stops_words(message):
         y = []
-        for word in message.lower.split():
+        for word in message.split():
             if word not in stop_word:
-                y.appned(word)
+                y.append(word)
         return " ".join(y)
 
     wc = WordCloud(width=500, height=500, min_font_size=10, background_color='white')
-    tem['message'] = tem['message'].apply(remove_stop)
+    tem['message'] = tem['message'].apply(remove_stops_words)
     df_wc = wc.generate(tem["message"].str.cat(sep=" "))
     return df_wc
 
