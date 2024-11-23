@@ -23,11 +23,15 @@ def preprocess(data):
     df['user'] = users
     df['message'] = messeges
     df.drop(columns=['usermessage'], inplace=True)
+
+    df['only_date'] = df['date'].dt.date
     df['year'] = df['date'].dt.year
     df['month'] = df['date'].dt.month_name()
+    df['month_num'] = df['date'].dt.month
     df['day'] = df['date'].dt.day
     df['hour'] = df['date'].dt.hour
     df['minute'] = df['date'].dt.minute
+    df['day_name'] = df['date'].dt.day_name()
 
     period = []
     for hour in df[['day', 'hour']]['hour']:

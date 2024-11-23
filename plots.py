@@ -113,4 +113,84 @@ def most_used(selected_user, df):
                 words.append(word)
     common_df = pd.DataFrame(Counter(words).most_common(20))
     return common_df
-#,mnfdk
+
+
+import emoji
+
+
+def emoji_analysis(selected_user, df):
+    if selected_user != 'overall':
+        df = df[df['user'] == selected_user]
+    emojis = []
+    for msg in df['message']:
+        emojis.extend([c for c in msg if emoji.is_emoji(c)])
+
+    ndf = pd.DataFrame(Counter(emojis).most_common(len(Counter(emojis))))
+    return ndf
+
+
+# Time Analysis
+def time_analysis(selected_user, df):
+    if selected_user != 'overall':
+        df = df[df['user'] == selected_user]
+    timeline = df.groupby(['year', 'month_num', 'month']).count()['message'].reset_index()
+    time = []
+    for i in range(timeline.shape[0]):
+        time.append(timeline['month'][i] + '-' + str(timeline['year'][i]))
+    timeline['time'] = time
+    return timeline
+
+
+# def daily_timeline(selected_user, df):
+#     if selected_user != 'Overall':
+#         df = df[df['user'] == selected_user]
+#
+#     daily_timelines = df.groupby('only_date').count()['message'].reset_index()
+#
+#     return daily_timelines
+
+
+# Week Activity
+
+def week_activity_map(selected_user, df):
+    df = df[df['user'] == selected_user]
+    return df['day_name'].value_counts()
+
+
+def overall_week_activity_map(df):
+    return df['day_name'].value_counts()
+
+
+def overall_month_activity_map(df):
+    return df['month'].value_counts()
+
+
+def month_activity_map(selected_user, df):
+    df = df[df['user'] == selected_user]
+    return df['month'].value_counts()
+
+
+def overall_activity_heatmap(df):
+    user_heatmap = df.pivot_table(index='day_name', columns='period', values='message', aggfunc='count').fillna(0)
+    return user_heatmap
+
+
+def activity_heatmap(selected_user, df):
+    df = df[df['user'] == selected_user]
+
+    user_heatmap = df.pivot_table(index='day_name', columns='period', values='message', aggfunc='count').fillna(0)
+
+    return user_heatmap
+
+
+def daily_timeline(selected_user, df):
+    df = df[df['user'] == selected_user]
+    daily_timelines = df.groupby('only_date').count()['message'].reset_index()
+
+    return daily_timelines
+
+
+def overall_daily_timeline(df):
+    daily_timelines = df.groupby('only_date').count()['message'].reset_index()
+
+    return daily_timelines
