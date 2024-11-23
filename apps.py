@@ -152,4 +152,4 @@ if uploaded_file is not None:
             fig, ax = plt.subplots()
             ax.pie(ndf[1].head(), labels=ndf[0].head(), autopct="%0.2f")
             st.pyplot(fig)
-#finished
+#finished end
